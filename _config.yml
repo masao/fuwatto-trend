@@ -1,0 +1,25 @@
+# Themes are encouraged to use these universal variables 
+# so be sure to set them if your theme uses them.
+#
+title : ふわっとトレンド
+author:
+  name : Masao Takaku
+  url  : http://masao.jpn.org
+  twitter : tmasao
+
+trend:
+  url : http://trend.fuwat.to
+  logo: http://trend.fuwat.to/fuwattotrend.png
+
+markdown: rdiscount
+markdown: kramdown
+
+kramdown:
+  toc_levels: 1..2
+
+rdiscount: 
+  extensions: [ generate_toc ]
+
+analytics :
+  google : 
+    tracking_id : 'UA-123-12'
