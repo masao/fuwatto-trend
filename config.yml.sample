@@ -1,0 +1,12 @@
+cache:
+  basedir: "cache"
+  # expires after 3days (60 * 60 * 24 * 3)
+  expires: 259200
+ciniibooks: 
+  label: "CiNii Books"
+  appid: "xxxxxxxxxxxxxxxxxxxx"
+  base_url: "http://ci.nii.ac.jp/books/opensearch/search"
+ciniiarticles:
+  label: "CiNii Articles"
+  appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  base_url: "http://ci.nii.ac.jp/opensearch/search"

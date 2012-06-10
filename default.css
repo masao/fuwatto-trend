@@ -1,0 +1,9 @@
+h1 {
+  /*background-image: url( "CiNiiTrend.png" );*/
+  text-align: center;
+  margin: 0;
+}
+div.last-update, div.footer {
+  text-align: right;
+  font-size: smaller;
+}

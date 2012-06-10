@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--Load the AJAX API-->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load('jquery', '1')</script>
+<script type="text/javascript" src="./trend.js"></script>
+<link rel="stylesheet" href="default.css" type="text/css">
+<link rev="made" href="mailto:tmasao@acm.org">
+<title>Fuwatto Trend<%=h ": #{ q }" if q %></title>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-389547-5']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+<!-- hhmts start --> <div class="last-update">最終更新日: 2012年06月10日</div>
+<!-- hhmts end -->
+<h1><img src="fuwattotrend.png" alt="Fuwatto Trend" title="Fuwatto Trend"></h1>
+<form action="./" id="form">
+<div style="text-align:center">
+<input type="search" name="q" value="<%=h q %>" placeholder="portal" size="30">
+<input type="submit" value=" Trend! ">
+<div style="font-size:smaller">
+<label><input type="checkbox" name="target" value="ciniiarticles"<%= " checked" if targets.include?( "ciniiarticles" ) or targets.empty? %>>CiNii Articles</label>
+<label><input type="checkbox" name="target" value="ciniibooks"<%= " checked" if targets.include?( "ciniibooks" ) %>>CiNii Books</label>
+<!--
+<label><input type="checkbox" name="target" value="ndlsearch">NDL Search</label>
+<label><input type="checkbox" name="target" value="worldcat">Worldcat</label>
+<label><input type="checkbox" name="target" value="googlebooks">Google Books</label>
+-->
+</div>
+</div>
+</form>
+<div id="chart_div"></div>
+<div class="footer">
+<hr>
+<address>
+高久雅生 (Masao Takaku)<br>
+<a href="http://masao.jpn.org/">http://masao.jpn.org/</a>, 
+<a href="mailto:tmasao@acm.org">tmasao@acm.org</a>
+</address>
+</div>
+</body>
+</html>
