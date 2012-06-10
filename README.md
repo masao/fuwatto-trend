@@ -10,10 +10,10 @@ Supported databases
 
 Fuwatto Trend supports several bibliographic databases as follows:
 
-* !(CiNii Articles)[http://ci.nii.ac.jp]
-* !(CiNii Books)[http://ci.nii.ac.jp/books/]
+* [CiNii Articles](http://ci.nii.ac.jp)
+* [CiNii Books](http://ci.nii.ac.jp/books/)
 
 Contact
 -------
 
-* !(Masao Takaku)[http://masao.jpn.org]
+* [Masao Takaku](http://masao.jpn.org)
