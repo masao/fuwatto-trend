@@ -72,60 +72,70 @@ module Trend
       def search( q, opts = {} )
          appid = opts[ :config ][ appname ][ "appid" ]
          done = {}
-         params_default = {
-            :appid => appid,
-            :q => q,
-            # :count => 200,
-         }
-         params = params_default.dup
-         params[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
-         params[ :count ] = 200
-         result1 = _search( params, opts[ :config ] )
-         if result1[ :totalResults ] > 0
-            years = result1[ :pubyear ].keys.sort.reverse
-            while( years.size > 1 )
-               y = years.shift
-               done[ y ] = result1[ :pubyear ][ y ]
-            end
-            if result1[ :totalResults ] <= result1[ :itemsPerPage ]
-               done[ years[-1] ] = result1[ :pubyear ][ years[-1] ]
-            else
-               params = params_default.dup
-               params[ :sortorder ] = opts[ :sortorder_oldest ] if opts[ :sortorder_oldest ]
-               params[ :count ] = 200
-               result2 = _search( params, opts[ :config ] )
-               years2 = result2[ :pubyear ].keys.sort
-               if years2.empty?
-                  100.times do |i|
-                     params[ :start ] = i * params[ :count ]
-                     result2 = _search( params, opts[ :config ] )
-                     years2 = result2[ :pubyear ].keys.sort
-                     break if not years2.empty?
+         if q.nil? or q.empty?
+            {
+               :q => q,
+               :target => appname,
+               :label  => opts[ :config ][ appname ][ "label" ],
+               :totalResults => 0,
+               :pubyear => done,
+            }
+         else
+            params_default = {
+               :appid => appid,
+               :q => q,
+               # :count => 200,
+            }
+            params = params_default.dup
+            params[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
+            params[ :count ] = 200
+            result1 = _search( params, opts[ :config ] )
+            if result1[ :totalResults ] > 0
+               years = result1[ :pubyear ].keys.sort.reverse
+               while( years.size > 1 )
+                  y = years.shift
+                  done[ y ] = result1[ :pubyear ][ y ]
+               end
+               if result1[ :totalResults ] <= result1[ :itemsPerPage ]
+                  done[ years[-1] ] = result1[ :pubyear ][ years[-1] ]
+               else
+                  params = params_default.dup
+                  params[ :sortorder ] = opts[ :sortorder_oldest ] if opts[ :sortorder_oldest ]
+                  params[ :count ] = 200
+                  result2 = _search( params, opts[ :config ] )
+                  years2 = result2[ :pubyear ].keys.sort
+                  if years2.empty?
+                     100.times do |i|
+                        params[ :start ] = i * params[ :count ]
+                        result2 = _search( params, opts[ :config ] )
+                        years2 = result2[ :pubyear ].keys.sort
+                        break if not years2.empty?
+                     end
+                  end
+                  while( years2.size > 1 )
+                     y = years2.shift
+                     done[ y ] = result2[ :pubyear ][ y ]
+                  end
+                  ( years2.first .. years.first ).each do |y|
+                     param = { :year_from => y, :year_to => y }
+                     param[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
+                     result = _search( params_default.merge( param ), opts[ :config ] )
+                     done[ y ] = result[ :totalResults ]
                   end
                end
-               while( years2.size > 1 )
-                  y = years2.shift
-                  done[ y ] = result2[ :pubyear ][ y ]
-               end
-               ( years2.first .. years.first ).each do |y|
-                  param = { :year_from => y, :year_to => y }
-                  param[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
-                  result = _search( params_default.merge( param ), opts[ :config ] )
-                  done[ y ] = result[ :totalResults ]
+               d = done.keys.sort
+               ( d[0] .. d[-1] ).each do |k|
+                  done[ k ] ||= 0
                end
             end
-            d = done.keys.sort
-            ( d[0] .. d[-1] ).each do |k|
-               done[ k ] ||= 0
-            end
+            {
+               :q => q,
+               :target => appname,
+               :label  => opts[ :config ][ appname ][ "label" ],
+               :totalResults => result1[ :totalResults ],
+               :pubyear => done,
+            }
          end
-         {
-            :q => q,
-            :target => appname,
-            :label  => opts[ :config ][ appname ][ "label" ],
-            :totalResults => result1[ :totalResults ],
-            :pubyear => done,
-         }
       end
 
       include Util
