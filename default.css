@@ -19,7 +19,7 @@ h1 {
 #navi li a {
   text-align: center;
 }
-div.last-update, div.footer {
+div.last-update, div.footer, footer {
   text-align: right;
   font-size: smaller;
 }
