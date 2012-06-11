@@ -3,6 +3,22 @@ h1 {
   text-align: center;
   margin: 0;
 }
+#navi {
+  list-style-type: none;
+  font-size: smaller;
+  text-align: right;
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+#navi li {
+  display: inline;
+  padding: .1em .5em;
+  /* border: solid 1px gray; */
+  margin-left: 2px;
+}
+#navi li a {
+  text-align: center;
+}
 div.last-update, div.footer {
   text-align: right;
   font-size: smaller;
