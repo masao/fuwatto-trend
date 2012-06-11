@@ -6,13 +6,18 @@
     <title>{{ page.title }}</title>
     {% if page.description %}<meta name="description" content="{{ page.description }}"/>{% endif %}
     <meta name="author" content="{{ site.author.name }}"/>
-    <link rel="stylesheet" href="https://raw.github.com/masao/fuwatto-trend/master/default.css" type="text/css" />
+    <link rel="stylesheet" href="{{ site.trend.url }}/default.css" type="text/css" />
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
   <body>
-    <h1><img src="{{ site.trend.logo }}" alt="{{ site.title }}" title="{{ site.title }}"></h1>
+    <ul id="navi">
+      <li><a href="{{ site.trend.url }}">&laquo;ふわっとトレンド</a></li>
+      <li><a href="./">これはなに？</a></li>
+      <li><a href="./history.html">更新履歴</a></li>
+    </ul>
+    <h1><a href="{{ site.trend.url }}"><img src="{{ site.trend.logo }}" alt="{{ site.title }}" title="{{ site.title }}"></a></h1>
     <div id="content">{{ content }}</div>
     <footer>
       <p>&copy; 2012 <a href="{{ site.author.url }}">{{ site.author.name }}</a></p>
