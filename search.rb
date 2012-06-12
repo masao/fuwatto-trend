@@ -63,6 +63,7 @@ module Trend
    end
 
    class SearchBase
+      LIMIT_YEAR = 1500
       def appname
          ( /::(\w+)\Z/.match(self.class.to_s) )[1].downcase
       end
@@ -105,11 +106,16 @@ module Trend
                   result2 = _search( params, opts[ :config ] )
                   years2 = result2[ :pubyear ].keys.sort
                   if years2.empty?
-                     100.times do |i|
-                        params[ :start ] = i * params[ :count ]
-                        result2 = _search( params, opts[ :config ] )
-                        years2 = result2[ :pubyear ].keys.sort
-                        break if not years2.empty?
+                     params[ :year_from ] = LIMIT_YEAR
+                     result2 = _search( params, opts[ :config ] )
+                     years2 = result2[ :pubyear ].keys.sort
+                     if years2.empty?
+                        10.times do |i|
+                           params[ :start ] = i * params[ :count ]
+                           result2 = _search( params, opts[ :config ] )
+                           years2 = result2[ :pubyear ].keys.sort
+                           break if not years2.empty?
+                        end
                      end
                   end
                   while( years2.size > 1 )
@@ -182,7 +188,7 @@ module Trend
             next if pubdate.nil?
             if pubdate.content =~ /\A(\d\d\d\d)/o
                pubyear = $1.to_i
-               next if pubyear < 1500
+               next if pubyear < LIMIT_YEAR
                count[ pubyear ] ||= 0
                count[ pubyear ] += 1
             end

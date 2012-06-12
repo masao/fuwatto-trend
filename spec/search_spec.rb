@@ -24,6 +24,21 @@ describe "search.rb" do
          end
 
          it "should return some results for unusual query '日本', too many hits." do
+            result = db.search( "日本", { :config => config } )
+            result[ :pubyear ].should_not be_empty
+         end
+      end
+   end
+
+   context Trend::CiNiiBooks do
+      config_fname = File.join( File.dirname( __FILE__ ), "..", "config.yml" )
+      config = YAML.load( open config_fname )
+      db = Trend::CiNiiBooks.new
+
+      describe "#search" do
+         it "should return some results for unusual query '日本', too many hits." do
+            result = db.search( "日本", { :config => config } )
+            result[ :pubyear ].should_not be_empty
          end
       end
    end
