@@ -13,7 +13,7 @@ require "json"
 require "libxml"
 
 module Trend
-   VERSION = 0.1
+   VERSION = 0.2
    USER_AGENT = "CiNii-Trend #{ VERSION }"
    module Util
       def cache_xml( basedir, prefix, params )
