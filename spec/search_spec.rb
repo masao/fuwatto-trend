@@ -28,11 +28,13 @@ describe "search.rb" do
             result[ :pubyear ][ 2010 ].should have_key( :url )
             url = result[ :pubyear ][ 2010 ][ :url ]
             url.should match( /\b2010\b/ )
+            url.should_not match( /appid/ )
             result[ :pubyear ][ 2010 ].should have_key( :number )
          end
-         it "should return url for each year." do
-            result = db.search( "portal", { :config => config } )
-            result[ :pubyear ][ 2010 ][ :url ].should_not match( /appid/ )
+
+         it "should return some results for unusual query '日本', too many hits." do
+            result = db.search( "日本", { :config => config } )
+            result[ :pubyear ].should_not be_empty
          end
       end
    end
@@ -47,6 +49,11 @@ describe "search.rb" do
             result = db.search( "ウェブログ", { :config => config } )
             result[ :pubyear ][ 2003 ].should have_key( :url )
             result[ :pubyear ][ 2003 ][ :url ].should match( /\b2003\b/ )
+         end
+
+         it "should return some results for unusual query '日本', too many hits." do
+            result = db.search( "日本", { :config => config } )
+            result[ :pubyear ].should_not be_empty
          end
       end
    end
