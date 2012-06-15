@@ -23,8 +23,8 @@ title: ふわっとトレンドとは？
 謝辞
 ----
 
-* [Google Chart API](https://developers.google.com/chart/)
-* [Ruby](http://www.ruby-lang.org/)
+* [Flot](https://code.google.com/p/flot/) - グラフ描画用ライブラリ
+* [Ruby](http://www.ruby-lang.org/) - プログラミング言語
 
 連絡先
 ------
