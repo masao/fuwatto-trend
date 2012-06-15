@@ -63,6 +63,9 @@ module Trend
    end
 
    class SearchBase
+      def initialize( config )
+         @config = config
+      end
       def appname
          ( /::(\w+)\Z/.match(self.class.to_s) )[1].downcase
       end
@@ -70,13 +73,13 @@ module Trend
 
    class CiNiiBase < SearchBase
       def search( q, opts = {} )
-         appid = opts[ :config ][ appname ][ "appid" ]
+         appid = @config[ appname ][ "appid" ]
          done = {}
          if q.nil? or q.empty?
             {
                :q => q,
                :target => appname,
-               :label  => opts[ :config ][ appname ][ "label" ],
+               :label  => @config[ appname ][ "label" ],
                :totalResults => 0,
                :pubyear => done,
             }
@@ -89,49 +92,63 @@ module Trend
             params = params_default.dup
             params[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
             params[ :count ] = 200
-            result1 = _search( params, opts[ :config ] )
+            result1 = _search( params )
             if result1[ :totalResults ] > 0
                years = result1[ :pubyear ].keys.sort.reverse
                while( years.size > 1 )
                   y = years.shift
-                  done[ y ] = result1[ :pubyear ][ y ]
+                  done[ y ] = {
+                     :number => result1[ :pubyear ][ y ],
+                     :url => make_url( y, q ),
+                  }
                end
                if result1[ :totalResults ] <= result1[ :itemsPerPage ]
-                  done[ years[-1] ] = result1[ :pubyear ][ years[-1] ]
+                  done[ years[-1] ] = {
+                     :number => result1[ :pubyear ][ years[-1] ],
+                     :url => make_url( years[-1], q ),
+                  }
                else
                   params = params_default.dup
                   params[ :sortorder ] = opts[ :sortorder_oldest ] if opts[ :sortorder_oldest ]
                   params[ :count ] = 200
-                  result2 = _search( params, opts[ :config ] )
+                  result2 = _search( params )
                   years2 = result2[ :pubyear ].keys.sort
                   if years2.empty?
                      100.times do |i|
                         params[ :start ] = i * params[ :count ]
-                        result2 = _search( params, opts[ :config ] )
+                        result2 = _search( params )
                         years2 = result2[ :pubyear ].keys.sort
                         break if not years2.empty?
                      end
                   end
                   while( years2.size > 1 )
                      y = years2.shift
-                     done[ y ] = result2[ :pubyear ][ y ]
+                     done[ y ] = {
+                        :number => result2[ :pubyear ][ y ],
+                        :url => make_url( y, q ),
+                     }
                   end
                   ( years2.first .. years.first ).each do |y|
                      param = { :year_from => y, :year_to => y }
                      param[ :sortorder ] = opts[ :sortorder_latest ] if opts[ :sortorder_latest ]
-                     result = _search( params_default.merge( param ), opts[ :config ] )
-                     done[ y ] = result[ :totalResults ]
+                     result = _search( params_default.merge( param ) )
+                     done[ y ] = {
+                        :number => result[ :totalResults ],
+                        :url => make_url( y, q ),
+                     }
                   end
                end
                d = done.keys.sort
                ( d[0] .. d[-1] ).each do |k|
-                  done[ k ] ||= 0
+                  done[ k ] ||= {
+                     :number => 0,
+                  }
                end
             end
             {
                :q => q,
                :target => appname,
-               :label  => opts[ :config ][ appname ][ "label" ],
+               :label  => @config[ appname ][ "label" ],
                :totalResults => result1[ :totalResults ],
                :pubyear => done,
             }
@@ -139,12 +156,12 @@ module Trend
       end
 
       include Util
-      def _search( params, config = {} )
+      def _search( params )
          count = {}
          cont = nil
-         base_url = config[ appname ][ "base_url" ]
-         cache_dir = config[ "cache" ][ "basedir" ]
-         cache_expires = config[ "cache" ][ "expires" ]
+         base_url = @config[ appname ][ "base_url" ]
+         cache_dir = @config[ "cache" ][ "basedir" ]
+         cache_expires = @config[ "cache" ][ "expires" ]
          cache_params = params.reject do |k, v|
             k == :appid or k == :format
          end
@@ -190,6 +207,14 @@ module Trend
          data[ :pubyear ] = count
          data
       end
+
+      protected
+      def make_url( year, q )
+         base_url = @config[ appname ][ "base_url" ].dup
+         year = URI.escape( year.to_s );
+         q = URI.escape( q.to_s );
+         "#{ base_url }?year_from=#{ year }&year_to=#{ year }&q=#{ q }&format=html"
+      end
    end
 
    class CiNiiArticles < CiNiiBase
@@ -217,9 +242,9 @@ if $0 == __FILE__
    callback = @cgi.params[ "callback" ][ 0 ]
    case target
    when "ciniiarticles"
-      db = Trend::CiNiiArticles.new
+      db = Trend::CiNiiArticles.new( config )
    when "ciniibooks"
-      db = Trend::CiNiiBooks.new
+      db = Trend::CiNiiBooks.new( config )
    end
    result = db.search( q, :config => config )
    print @cgi.header "application/json"
