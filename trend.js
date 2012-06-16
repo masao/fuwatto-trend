@@ -129,10 +129,10 @@ function handleTooltip( type, item, q ) {
       if ( url ) {
         showTooltip( identifier, item.pageX, item.pageY,
 	             '<b>' + x + '</b>: <a target="_blank" href="'+ url +'">' + y + '</a>' );
-      } else {
-        showTooltip( identifier, item.pageX, item.pageY,
-	             '<b>' + x + '</b>: ' + y + '</a>' );
       }
+    } else {
+      showTooltip( identifier, item.pageX, item.pageY,
+		   '<b>' + x + '</b>: ' + y + '</a>' );
     }
   } else {
     $( '#' + identifier ).remove();
