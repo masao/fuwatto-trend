@@ -122,14 +122,17 @@ function handleTooltip( type, item, q ) {
     var y = item.datapoint[1];
     var targets = $.map( fuwatto_trend_data[ q ], function(v,k){ return k; } );
     var target = targets[ item.seriesIndex ];
-    var url = fuwatto_trend_data[ q ][ target ][ x ][ "url" ];
-    //alert( [ x, url ] );
-    if ( url ) {
-      showTooltip( identifier, item.pageX, item.pageY,
-	           '<b>' + x + '</b>: <a target="_blank" href="'+ url +'">' + y + '</a>' );
-    } else {
-      showTooltip( identifier, item.pageX, item.pageY,
-	           '<b>' + x + '</b>: ' + y + '</a>' );
+    var this_year_data = fuwatto_trend_data[ q ][ target ][ x ];
+    if ( this_year_data ) {
+      var url = this_year_data[ "url" ];
+      //alert( [ x, url ] );
+      if ( url ) {
+        showTooltip( identifier, item.pageX, item.pageY,
+	             '<b>' + x + '</b>: <a target="_blank" href="'+ url +'">' + y + '</a>' );
+      } else {
+        showTooltip( identifier, item.pageX, item.pageY,
+	             '<b>' + x + '</b>: ' + y + '</a>' );
+      }
     }
   } else {
     $( '#' + identifier ).remove();
