@@ -7,7 +7,7 @@ require "erb"
 module Trend
    include ERB::Util
    def eval_rhtml( fname, binding )
-      rhtml = open( fname ){|io| io.read }
+      rhtml = open( fname, 'r:utf-8' ){|io| io.read }
       result = ERB::new( rhtml, $SAFE, "<>" ).result( binding )
    end
 end

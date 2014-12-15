@@ -1,0 +1,9 @@
+ServerName trend.fuwat.to
+
+DocumentRoot /project/fuwatto-trend
+DirectoryIndex index.html index.cgi
+
+<Directory /project/fuwatto-trend>
+Options All MultiViews
+AllowOverride All
+</Directory>
