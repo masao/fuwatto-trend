@@ -241,7 +241,6 @@ end
 if $0 == __FILE__
    result = {}
    config = YAML.load( open("config.yml") )
-   #p config
    @cgi = CGI.new
    q = @cgi.params[ "q" ][ 0 ]
    target = @cgi.params[ "target" ][ 0 ] || "ciniiarticles"
@@ -253,6 +252,5 @@ if $0 == __FILE__
       db = Trend::CiNiiBooks.new( config )
    end
    result = db.search( q, :config => config )
-   print @cgi.header "application/json"
-   print result.to_json
+   @cgi.out( "application/json" ){ result.to_json }
 end
