@@ -18,7 +18,7 @@ module Trend
    module Util
       def cache_xml( basedir, prefix, params )
          xml_fname = params.keys.sort_by{|e| e.to_s }.map{|k|
-            [ URI.escape( k.to_s ), URI.escape( params[k].to_s ) ].join( "=" )
+            [ URI.encode_www_form_component( k.to_s ), URI.encode_www_form_component( params[k].to_s ) ].join( "=" )
          }.join("_")
          if xml_fname.size > 245
             xml_fname = Digest::MD5.hexdigest( xml_fname )
@@ -178,7 +178,7 @@ module Trend
             params[ :format ] = "atom"
             if not params.empty?
                opts_s = params.keys.map do |e|
-                  "#{ e }=#{ URI.escape( params[e].to_s ) }"
+                  "#{ e }=#{ URI.encode_www_form_component( params[e].to_s ) }"
                end.join( "&" )
             end
             # CiNii Opensearch API
@@ -217,8 +217,8 @@ module Trend
       protected
       def make_url( year, q )
          base_url = @config[ appname ][ "base_url" ].dup
-         year = URI.escape( year.to_s );
-         q = URI.escape( q.to_s );
+         year = URI.encode_www_form_component( year.to_s );
+         q = URI.encode_www_form_component( q.to_s );
          "#{ base_url }?year_from=#{ year }&year_to=#{ year }&q=#{ q }&format=html"
       end
    end
