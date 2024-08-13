@@ -1,9 +1,25 @@
+NameVirtualHost *:80
+<VirtualHost *:80>
 ServerName trend.fuwat.to
 
 DocumentRoot /project/fuwatto-trend
-DirectoryIndex index.html index.cgi
+
+AddHandler cgi-script .rb
+DirectoryIndex index.rb index.cgi index.html
 
 <Directory /project/fuwatto-trend>
+Require all granted
 Options All MultiViews
 AllowOverride All
 </Directory>
+
+<Files "config.yml">
+deny from all
+</Files>
+<Files "cache">
+deny from all
+</Files>
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =trend.fuwat.to
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>

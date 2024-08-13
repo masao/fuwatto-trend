@@ -1,9 +1,0 @@
-AddHandler cgi-script .rb
-DirectoryIndex index.rb
-
-<Files "config.yml">
-deny from all
-</Files>
-<Files "cache">
-deny from all
-</Files>
